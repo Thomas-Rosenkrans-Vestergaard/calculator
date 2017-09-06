@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'idea'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    files('build/generated-src/antlr/main')
+    compile 'org.antlr:antlr4:4.7'
+    antlr 'org.antlr:antlr4:4.7'
+    testCompile 'junit:junit:4.12'
+}
+
+generateGrammarSource {
+    outputDirectory = new File('build/generated-src/antlr/main/tvestergaard/calculator/antlr')
+    maxHeapSize = "64m"
+    arguments += ["-visitor", "-long-messages"]
+}
+
+clean {
+    delete 'generated-src'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'tvestergaard.calculator.Calculator'
+    }
+}
