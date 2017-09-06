@@ -39,7 +39,7 @@ public class CalculatorState
 	public void addFunctions()
 	{
 
-		this.functions.add(new PredefinedConcreteFunction("abs", 1, "pow(a)")
+		this.functions.add(new PredefinedConcreteFunction("abs", 1, "abs(a)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
