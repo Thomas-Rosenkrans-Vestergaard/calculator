@@ -127,7 +127,7 @@ public class CalculatorState
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("max", 1, "max(a,b)")
+		this.functions.add(new PredefinedConcreteFunction("max", 2, "max(a,b)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
@@ -135,7 +135,7 @@ public class CalculatorState
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("min", 1, "min(a,b)")
+		this.functions.add(new PredefinedConcreteFunction("min", 2, "min(a,b)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
