@@ -71,6 +71,14 @@ public class CalculatorState
 			}
 		});
 
+		this.functions.add(new PredefinedConcreteFunction("cbrt", 1, "cbrt(a)")
+		{
+			@Override public Double call(CalculatorState state, List<Double> arguments)
+			{
+				return Math.cbrt(arguments.get(0));
+			}
+		});
+
 		this.functions.add(new PredefinedConcreteFunction("ceil", 1, "ceil(a)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
@@ -111,19 +119,19 @@ public class CalculatorState
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("log", 1, "log(a)")
+		this.functions.add(new PredefinedConcreteFunction("log", 1, "log(number)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
-				return Math.log(arguments.get(0));
+				return Math.log(arguments.get(0)) / Math.E;
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("log10", 1, "log10(a)")
+		this.functions.add(new PredefinedConcreteFunction("log", 2, "log(number,base)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
-				return Math.log10(arguments.get(0));
+				return Math.log(arguments.get(0)) / Math.log(arguments.get(1));
 			}
 		});
 
@@ -151,7 +159,7 @@ public class CalculatorState
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("random", 1, "random()")
+		this.functions.add(new PredefinedConcreteFunction("random", 0, "random()")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
@@ -167,11 +175,19 @@ public class CalculatorState
 			}
 		});
 
+		this.functions.add(new PredefinedConcreteFunction("root", 2, "root(a,b)")
+		{
+			@Override public Double call(CalculatorState state, List<Double> arguments)
+			{
+				return Math.pow(Math.E, Math.log(arguments.get(0)) / arguments.get(1));
+			}
+		});
+
 		this.functions.add(new PredefinedConcreteFunction("round", 1, "round(a)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
-				return (double)Math.round(arguments.get(0));
+				return (double) Math.round(arguments.get(0));
 			}
 		});
 
