@@ -25,15 +25,6 @@ public class CalculatorMemory
 	 */
 	public CalculatorMemory()
 	{
-		reset();
-	}
-
-	/**
-	 * Resets the memory.
-	 */
-	public void reset()
-	{
-		this.stack.clear();
 		this.stack.add(new HashMap<>());
 	}
 

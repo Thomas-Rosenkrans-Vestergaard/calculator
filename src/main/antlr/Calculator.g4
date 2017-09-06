@@ -97,7 +97,7 @@ literalExpression
 COMMAND
     :   'functions'
     |   'memory'
-    |   'reset'
+    |   'quit'
     ;
 
 CONST
@@ -157,5 +157,5 @@ IDENTIFIER
     ;
 
 WHITESPACE
-    :   [ \t\r\n]* -> skip
+    :   [ \t\r\n]+ -> skip
     ;

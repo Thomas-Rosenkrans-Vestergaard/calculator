@@ -88,11 +88,6 @@ public class ExpressionListener extends CalculatorBaseListener
 			return;
 		}
 
-		if (commandName.equals("reset")) {
-			resetMemory();
-			return;
-		}
-
 		throw new RuntimeException(String.format("Command '%s' hasValue not yet been implemented.", commandName));
 	}
 
@@ -118,14 +113,6 @@ public class ExpressionListener extends CalculatorBaseListener
 			System.out.println(String.format(" - %s", function.getSignature()));
 		});
 		System.out.print(Colors.ANSI_RESET);
-	}
-
-	/**
-	 * Clears the memory of the calculator.
-	 */
-	private void resetMemory()
-	{
-		this.state.memory.reset();
 	}
 
 	/**

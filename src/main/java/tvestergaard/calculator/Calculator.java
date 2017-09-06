@@ -19,7 +19,12 @@ public class Calculator
 
 		while (true) {
 			try {
-				String            input      = scanner.nextLine();
+				String input = scanner.nextLine();
+
+				if (input.equals("quit")) {
+					break;
+				}
+
 				CharStream        charStream = CharStreams.fromString(input);
 				CalculatorLexer   lexer      = new CalculatorLexer(charStream);
 				CommonTokenStream tokens     = new CommonTokenStream(lexer);
