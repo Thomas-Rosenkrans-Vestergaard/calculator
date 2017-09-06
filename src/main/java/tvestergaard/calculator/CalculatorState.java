@@ -143,7 +143,7 @@ public class CalculatorState
 			}
 		});
 
-		this.functions.add(new PredefinedConcreteFunction("pow", 1, "pow(a,b)")
+		this.functions.add(new PredefinedConcreteFunction("pow", 2, "pow(a,b)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
 			{
