@@ -7,8 +7,9 @@ grammar Calculator;
 expression
     :   variableDeclaration
     |   functionDeclaration
-    |   multiplicativeExpression
+    |   constantDeclaration
     |   COMMAND
+    |   multiplicativeExpression
     ;
 
 variableDeclaration
@@ -35,6 +36,13 @@ functionParameters
         PAREN_CLOSE
     ;
 
+constantDeclaration
+    :   CONST
+        IDENTIFIER
+        EQUALS
+        multiplicativeExpression
+    ;
+
 multiplicativeExpression
     :   additiveExpression
     |   multiplicativeExpression multiplicativeOperator additiveExpression
@@ -58,9 +66,8 @@ additiveOperator
 primaryExpression
     :   parenthesizedExpression
     |   functionExpression
-    |   VALUE_INT
-    |   VALUE_FLOAT
-    |   IDENTIFIER
+    |   variableExpression
+    |   literalExpression
     ;
 
 parenthesizedExpression
@@ -78,10 +85,23 @@ functionArguments
         PAREN_CLOSE
     ;
 
+variableExpression
+    :   IDENTIFIER
+    ;
+
+literalExpression
+    :   VALUE_FLOAT
+    |   VALUE_INT
+    ;
+
 COMMAND
     :   'functions'
     |   'memory'
     |   'reset'
+    ;
+
+CONST
+    :   'const'
     ;
 
 FUNC

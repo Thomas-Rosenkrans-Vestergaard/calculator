@@ -19,5 +19,6 @@ public class CalculatorState
 	public CalculatorState()
 	{
 		this.functions.add(new AbsFunction());
+		this.functions.add(new PowFunction());
 	}
 }

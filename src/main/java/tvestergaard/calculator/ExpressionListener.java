@@ -1,5 +1,8 @@
 package tvestergaard.calculator;
 
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.RuleNode;
 import tvestergaard.calculator.antlr.CalculatorBaseListener;
 import tvestergaard.calculator.antlr.CalculatorParser.*;
 
@@ -37,6 +40,11 @@ public class ExpressionListener extends CalculatorBaseListener
 			enterFunctionDeclaration(functionDeclarationContext);
 		}
 
+		ConstantDeclarationContext constantDeclarationContext = ctx.constantDeclaration();
+		if (constantDeclarationContext != null) {
+			enterConstantDeclaration(constantDeclarationContext);
+		}
+
 		if (ctx.COMMAND() != null) {
 			enterCommand(ctx.getText());
 		}
@@ -47,6 +55,20 @@ public class ExpressionListener extends CalculatorBaseListener
 			Double            result  = visitor.visitMultiplicativeExpression(multiplicativeContext);
 			System.out.println(String.format("%s %s %s", Colors.ANSI_GREEN, Double.toString(result), Colors.ANSI_RESET));
 		}
+	}
+
+	/**
+	 * Handles constant declarations.
+	 *
+	 * @param ctx The context of the constant declaration.
+	 */
+	public void enterConstantDeclaration(ConstantDeclarationContext ctx)
+	{
+		ExpressionVisitor expressionVisitor = new ExpressionVisitor(this.state);
+		String            constantName      = ctx.IDENTIFIER().getText();
+		Double            constantValue     = expressionVisitor.visitMultiplicativeExpression(ctx.multiplicativeExpression());
+
+		this.state.memory.addConstant(constantName, constantValue);
 	}
 
 	/**
@@ -71,7 +93,7 @@ public class ExpressionListener extends CalculatorBaseListener
 			return;
 		}
 
-		throw new RuntimeException(String.format("Command '%s' has not yet been implemented.", commandName));
+		throw new RuntimeException(String.format("Command '%s' hasValue not yet been implemented.", commandName));
 	}
 
 	/**
@@ -115,7 +137,7 @@ public class ExpressionListener extends CalculatorBaseListener
 	{
 		String            variableName = ctx.IDENTIFIER().getText();
 		ExpressionVisitor visitor      = new ExpressionVisitor(state);
-		this.state.memory.add(
+		this.state.memory.addVariable(
 				variableName,
 				visitor.visitMultiplicativeExpression(ctx.multiplicativeExpression())
 		);
@@ -128,15 +150,16 @@ public class ExpressionListener extends CalculatorBaseListener
 	 */
 	@Override public void enterFunctionDeclaration(FunctionDeclarationContext ctx)
 	{
-		FunctionSignatureContext  signatureContext  = ctx.functionSignature();
-		FunctionParametersContext parametersContext = signatureContext.functionParameters();
-		String                    functionName      = signatureContext.IDENTIFIER().getText();
+		FunctionSignatureContext        signatureContext  = ctx.functionSignature();
+		FunctionParametersContext       parametersContext = signatureContext.functionParameters();
+		MultiplicativeExpressionContext bodyContext       = ctx.multiplicativeExpression();
+		String                          functionName      = signatureContext.IDENTIFIER().getText();
 		List<String> parameters = parametersContext.IDENTIFIER().stream()
 												   .map(parameter -> parameter.getText())
 												   .collect(Collectors.toList());
 
-		validateParameters(parameters, signatureContext.getText());
-		CustomConcreteFunction customFunction = new CustomConcreteFunction(functionName, parameters, signatureContext, ctx.multiplicativeExpression());
+		validateFunctionParameters(parameters, signatureContext.getText());
+		CustomConcreteFunction customFunction = new CustomConcreteFunction(functionName, parameters, signatureContext, bodyContext);
 		if (this.state.functions.has(customFunction)) {
 			throw new RuntimeException(String.format("Function '%s' already exists.", signatureContext.getText()));
 		}
@@ -150,7 +173,7 @@ public class ExpressionListener extends CalculatorBaseListener
 	 * @param parameters The list of parameters to validate.
 	 * @param signature  The signature of the function to check.
 	 */
-	private void validateParameters(List<String> parameters, String signature)
+	private void validateFunctionParameters(List<String> parameters, String signature)
 	{
 		List<String> temp = new ArrayList<>();
 		parameters.forEach(parameter -> {

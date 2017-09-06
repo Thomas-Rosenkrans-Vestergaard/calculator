@@ -11,6 +11,12 @@ public class FunctionCollection
 	 */
 	private HashMap<Integer, ConcreteFunction> functions = new HashMap<>();
 
+	/**
+	 * Gets a function from the collection.
+	 *
+	 * @param function The function to use for the hash.
+	 * @return The function instance.
+	 */
 	public ConcreteFunction get(Function function)
 	{
 		int hashCode = function.hashCode();
@@ -35,7 +41,7 @@ public class FunctionCollection
 	/**
 	 * Adds a new function to the collection.
 	 *
-	 * @param function The function to add.
+	 * @param function The function to addVariable.
 	 */
 	public void add(ConcreteFunction function)
 	{

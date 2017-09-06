@@ -1,6 +1,5 @@
 package tvestergaard.calculator;
 
-import org.antlr.v4.runtime.Parser;
 import tvestergaard.calculator.antlr.CalculatorBaseVisitor;
 import tvestergaard.calculator.antlr.CalculatorParser.*;
 
@@ -102,12 +101,14 @@ public class ExpressionVisitor extends CalculatorBaseVisitor<Double>
 			return visitFunctionExpression(functionExpressionContext);
 		}
 
-		if (ctx.VALUE_FLOAT() != null || ctx.VALUE_INT() != null) {
-			return Double.parseDouble(ctx.getText());
+		VariableExpressionContext variableExpressionContext = ctx.variableExpression();
+		if (variableExpressionContext != null) {
+			return getVariableValue(ctx.getText());
 		}
 
-		if (ctx.IDENTIFIER() != null) {
-			return getVariableValue(ctx.getText());
+		LiteralExpressionContext literalExpressionContext = ctx.literalExpression();
+		if (literalExpressionContext != null) {
+			return Double.parseDouble(ctx.getText());
 		}
 
 		throw new IllegalStateException("Illegal state when solving a primary expression.");
@@ -144,10 +145,10 @@ public class ExpressionVisitor extends CalculatorBaseVisitor<Double>
 	 */
 	private Double getVariableValue(String name)
 	{
-		if (!this.state.memory.has(name)) {
+		if (!this.state.memory.hasValue(name)) {
 			throw new RuntimeException(String.format("No variable with name '%s'.", name));
 		}
 
-		return this.state.memory.get(name);
+		return this.state.memory.getValue(name);
 	}
 }
