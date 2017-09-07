@@ -191,6 +191,16 @@ public class CalculatorState
 			}
 		});
 
+		this.functions.add(new PredefinedConcreteFunction("round", 2, "round(a,decimals)")
+		{
+			@Override public Double call(CalculatorState state, List<Double> arguments)
+			{
+				long   roundedFactor = Math.round(arguments.get(1));
+				double factor        = Math.pow((double) 10, (double) roundedFactor);
+				return (double) Math.round(arguments.get(0) * factor) / factor;
+			}
+		});
+
 		this.functions.add(new PredefinedConcreteFunction("signum", 1, "signum(a)")
 		{
 			@Override public Double call(CalculatorState state, List<Double> arguments)
