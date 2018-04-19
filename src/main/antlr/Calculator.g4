@@ -4,30 +4,31 @@ grammar Calculator;
     package tvestergaard.calculator.antlr;
 }
 
-expression
-    :   variableDeclaration
-    |   functionDeclaration
-    |   constantDeclaration
-    |   COMMAND
-    |   multiplicativeExpression
+program
+    :   (statement NL)+
+        EOF
     ;
 
-variableDeclaration
-    :   IDENTIFIER
-        EQUALS
-        multiplicativeExpression
+statement
+    :   command
+    |   functionDeclaration
+    |   variableDeclaration
+    |   constantDeclaration
+    |   expression
     ;
+
+command
+    :   '!' IDENTIFIER functionArguments?
+    ;
+
 
 functionDeclaration
-    :   FUNC
-        functionSignature
-        EQUALS
-        multiplicativeExpression
+    :   FUNC signature EQUALS expression
     ;
 
-functionSignature
-    :   IDENTIFIER
-        functionParameters?
+
+signature
+    :   IDENTIFIER functionParameters?
     ;
 
 functionParameters
@@ -36,11 +37,17 @@ functionParameters
         PAREN_CLOSE
     ;
 
+
+variableDeclaration
+    :   IDENTIFIER EQUALS expression
+    ;
+
 constantDeclaration
-    :   CONST
-        IDENTIFIER
-        EQUALS
-        multiplicativeExpression
+    :   CONST IDENTIFIER EQUALS expression
+    ;
+
+expression
+    :   multiplicativeExpression
     ;
 
 multiplicativeExpression
@@ -75,13 +82,12 @@ parenthesizedExpression
     ;
 
 functionExpression
-    :   IDENTIFIER
-        functionArguments
+    :   IDENTIFIER functionArguments
     ;
 
 functionArguments
     :   PAREN_OPEN
-        (multiplicativeExpression (COMMA multiplicativeExpression)*)?
+        (expression (COMMA expression)*)?
         PAREN_CLOSE
     ;
 
@@ -92,12 +98,6 @@ variableExpression
 literalExpression
     :   VALUE_FLOAT
     |   VALUE_INT
-    ;
-
-COMMAND
-    :   'functions'
-    |   'memory'
-    |   'quit'
     ;
 
 CONST
@@ -150,6 +150,10 @@ DOT
 
 COMMA
     :   ','
+    ;
+
+NL
+    :   '\n'
     ;
 
 IDENTIFIER

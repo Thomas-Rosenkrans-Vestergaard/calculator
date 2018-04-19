@@ -1,4 +1,4 @@
-package tvestergaard.calculator;
+package tvestergaard.calculator.view;
 
 public class Colors
 {
